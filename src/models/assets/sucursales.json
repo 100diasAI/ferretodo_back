@@ -1,0 +1,76 @@
+[   
+
+    {
+        "nombre":  "La Paz",
+        "capital": "La Paz",
+        "cp": "LP",
+        "coord": [-16.500000, -68.150000]
+    },
+    {
+        "nombre":  "Cochabamba",
+        "capital": "Cochabamba",
+        "cp": "CB",
+        "coord": [-17.383333, -66.150000]
+    },
+    {
+        "nombre":  "Santa Cruz",
+        "capital": "Santa Cruz de la Sierra",
+        "cp": "SC",
+        "coord": [-17.783333, -63.183333]
+    },
+    {
+        "nombre":  "Oruro",
+        "capital": "Oruro",
+        "cp": "OR",
+        "coord": [-17.983333, -67.150000]
+    },
+    {
+        "nombre":  "Potosí",
+        "capital": "Potosí",
+        "cp": "PT",
+        "coord": [-19.583333, -65.750000]
+    },
+    {
+        "nombre":  "Sucre",
+        "capital": "Sucre",
+        "cp": "CH",
+        "coord": [-19.033333, -65.262500]
+    },
+    {
+        "nombre":  "Tarija",
+        "capital": "Tarija",
+        "cp": "TJ",
+        "coord": [-21.533333, -64.733333]
+    },
+    {
+        "nombre":  "Pando",
+        "capital": "Cobija",
+        "cp": "PA",
+        "coord": [-11.033333, -68.733333]
+    },
+    {
+        "nombre":  "Beni",
+        "capital": "Trinidad",
+        "cp": "BN",
+        "coord": [-14.833333, -64.900000]
+    },
+    {
+        "nombre":  "La Paz",
+        "capital": "Tienda La Paz Centro",
+        "cp": "BN",
+        "coord": [-16.499082, -68.137447]
+    },
+    {
+        "nombre":  "Santa Cruz",
+        "capital": "Tienda Warnes Plaza",
+        "cp": "SC",
+        "coord": [-17.512214, -63.171777]
+    },
+    {
+        "nombre":  "Santa Cruz",
+        "capital": "Tienda Montero Sur",
+        "cp": "SC",
+        "coord": [-17.336002, -63.252103]
+    }
+
+]
