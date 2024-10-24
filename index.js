@@ -41,6 +41,9 @@ conn
             defaults: { id: p.idcategoria, nombre: p.categoria }
           });
 
+          // Generar un stock aleatorio entre 20 y 500
+          const randomStock = Math.floor(Math.random() * (500 - 20 + 1)) + 20;
+
           try {
             await Producto.create({
               id: p.id,
@@ -50,10 +53,10 @@ conn
               marca: p.marca,
               precio: parseFloat(p.precio),
               urlimagen: p.urlimagen,
-              stock: 0,
+              stock: randomStock,  // Usar el stock aleatorio generado
               categoriaId: categoria.id
             });
-            console.log('Producto creado exitosamente:', p.id);
+            console.log('Producto creado exitosamente:', p.id, 'con stock:', randomStock);
           } catch (error) {
             console.error('Error al crear producto:', p.id, error);
           }

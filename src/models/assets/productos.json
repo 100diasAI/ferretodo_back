@@ -8,7 +8,8 @@
     "marca": "Mobile",
     "subcategoria": "Ferreteria",
     "precio": 23.9,
-    "urlimagen": "https://multicenter.vtexassets.com/arquivos/ids/219763/Bisagra-Semicurva-Push-35Mm-1-21210.jpg?v=637252734467900000"
+    "urlimagen": "https://multicenter.vtexassets.com/arquivos/ids/219763/Bisagra-Semicurva-Push-35Mm-1-21210.jpg?v=637252734467900000",
+    "stock": 20
   },
   {
     "id": "33392",
@@ -844,7 +845,8 @@
     "marca": "Tactix",
     "subcategoria": "Herramientas Manuales",
     "precio": 24.9,
-    "urlimagen": "https://multicenter.vtexassets.com/arquivos/ids/209655/Adaptador-Tactix-1-17481.jpg?v=637039849300470000"
+    "urlimagen": "https://multicenter.vtexassets.com/arquivos/ids/209655/Adaptador-Tactix-1-17481.jpg?v=637039849300470000",
+    "stock":20
   },
   {
     "id": "39784",
