@@ -55,9 +55,16 @@ const {
   DatosFactura,
   Sucursales,
   Bitacora,
+  Cart,
 } = sequelize.models;
 
-// Relaciones
+// Definir las relaciones
+Usuario.hasMany(ProductosFav, { foreignKey: 'usuarioId' });
+ProductosFav.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
+Producto.hasMany(ProductosFav, { foreignKey: 'productId' });
+ProductosFav.belongsTo(Producto, { foreignKey: 'productId' });
+
 Sucursales.hasMany(Pedido);
 Pedido.belongsTo(Sucursales);
 
@@ -82,15 +89,19 @@ Usuario.hasMany(Rating);
 ProductosFav.belongsToMany(Usuario, { through: "producto_fav_usuario" });
 Usuario.belongsToMany(ProductosFav, { through: "producto_fav_usuario" });
 
-ProductosFav.belongsTo(Producto);
-Producto.hasMany(ProductosFav);
-
 Bitacora.belongsTo(Usuario, { foreignKey: 'usuarioId' });
 Usuario.hasMany(Bitacora, { foreignKey: 'usuarioId' });
 
 const BitacoraModel = require('./models/bitacora');
 
 BitacoraModel(sequelize);
+
+// Añade estas líneas después de las otras relaciones
+Usuario.hasMany(Cart, { foreignKey: 'userId' });
+Cart.belongsTo(Usuario, { foreignKey: 'userId' });
+
+Producto.hasMany(Cart, { foreignKey: 'productId' });
+Cart.belongsTo(Producto, { foreignKey: 'productId' });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

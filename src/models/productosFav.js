@@ -9,12 +9,15 @@ module.exports = (sequelize) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    productId:{
-      type: DataTypes.INTEGER,
+    productId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    usuarioId: {
+      type: DataTypes.STRING,
       allowNull: false,
     }
-   
-  },{
+  }, {
     timestamps: false
-});
+  });
 };

@@ -11,7 +11,7 @@ const categoryRouter = require("./category");
 const editProductRouter = require("./editProduct");
 const productRouter = require("./product.js");
 const favoritosRouter = require("./favoritos");
-const createFavoritos = require("./createFavoritos");
+const createFavoritosRouter = require("./createFavoritos");
 const deleteFavorito = require("./deleteFavorito");
 const actualizarPedidoRouter = require("./cambiarEstadoPedido");
 const userToAdminRouter = require("./userToAdmin");
@@ -20,8 +20,9 @@ const deleteCategoryRouter = require("./deleteCategory");
 const cargarProductDbRouter = require("./product-DB");
 const cargarUserDbRouter = require("./user-DB");
 const getCategories = require("./getCategories");
-const getUsers = require("./getUsers")
-const banRouter = require('./ban')
+const getUsers = require("./getUsers");
+const banRouter = require('./ban');
+const cartRouter = require('./Cart.js');
 
 const stockRouter = require("./stock");
 const getPedidosRouter = require("./getPedidos");
@@ -49,6 +50,7 @@ const getSucursales = require("./getSucursales");
 const logActivity = require("./bitacora");
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
+router.use("/cart", cartRouter);
 router.use("/bitacora", logActivity);
 router.use("/user", userRouter);
 router.post("/v1/auth/google", googleAuth);
@@ -58,8 +60,8 @@ router.use("/category", categoryRouter);
 router.use("/edit/product", editProductRouter);
 router.use("/product", productRouter);
 router.use("/favoritos/wishlist", favoritosRouter);
+router.use("/create/favoritos", createFavoritosRouter);
 router.use("/favoritos/delete", deleteFavorito);
-router.use("/create/favoritos", createFavoritos);
 router.use("/admin/pedido", actualizarPedidoRouter);
 router.use("/admin/usuario", userToAdminRouter);
 router.use("/usuarios", getUsers)

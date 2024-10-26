@@ -12,7 +12,7 @@ router.delete("/:id", async (req, res, next) => {
         await ProductosFav.destroy({
             where: {
                 productId: parseInt(id),
-                UsuarioId: userId
+                usuarioId: userId
             }
         });
         res.status(200).json({ message: 'Favorito eliminado' });
@@ -24,11 +24,11 @@ router.delete("/:id", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const favoritos = await ProductosFav.findAll({
-      where: { UsuarioId: req.params.id },
+      where: { usuarioId: req.params.id },
       include: [{ model: Producto }]
     });
 
-    const favoritosIds = favoritos.map(fav => fav.Producto.id);
+    const favoritosIds = favoritos.map(fav => fav.Producto ? fav.Producto.id : null).filter(id => id !== null);
     res.status(200).json(favoritosIds);
   } catch (error) {
     next(error);
