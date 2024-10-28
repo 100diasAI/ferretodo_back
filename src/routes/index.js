@@ -48,8 +48,10 @@ const editarPedidoFactura = require("./editarPedidoFactura");
 const { googleAuth } = require("../controllers/user.google.controller.js");
 const getSucursales = require("./getSucursales");
 const logActivity = require("./bitacora");
+const uploadRouter = require("./upload");
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
+router.use("/upload", uploadRouter);
 router.use("/cart", cartRouter);
 router.use("/bitacora", logActivity);
 router.use("/user", userRouter);
