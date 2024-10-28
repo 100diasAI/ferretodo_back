@@ -8,6 +8,6 @@ router.use(fileUpload({
   tempFileDir: '/tmp/'
 }));
 
-router.post('/upload', uploadImage);
+router.post('/', uploadImage);
 
 module.exports = router;
