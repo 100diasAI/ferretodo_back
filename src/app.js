@@ -9,7 +9,7 @@ const { FRONTEND_URL } = process.env;
 require("./db.js");
 
 
-const baseURL = FRONTEND_URL?.replace(/\/$/, "") || "http://localhost:3000" || "https://shopping-online-production.up.railway.app/"; // Elimina barra diagonal al final
+const baseURL = FRONTEND_URL?.replace(/\/$/, "") || "http://localhost:3000" || "https://farretodo-production.up.railway.app/"; // Elimina barra diagonal al final
 const server = express();
 const dotenv = require('dotenv');
 

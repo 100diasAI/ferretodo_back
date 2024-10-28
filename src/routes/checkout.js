@@ -51,8 +51,8 @@ router.post("/", isAuthenticated, (req, res) => {
                 installments: 12
                 },
             back_urls:{
-                success: "http://localhost:3000/checkout/success/"+idPedido,
-                failure: "http://localhost:3000/checkout/success/"+idPedido,
+                success: "https://farretodo-production.up.railway.app/checkout/success/"+idPedido,
+                failure: "https://farretodo-production.up.railway.app/checkout/success/"+idPedido,
             },
             auto_return: "approved",
             binary_mode: true,

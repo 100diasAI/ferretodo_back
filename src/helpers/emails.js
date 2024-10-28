@@ -21,7 +21,7 @@ const emailRegistro = async (data) => {
     text: "Comprueba tu cuenta en FerreTodo",
     html: `<p>Hola : ${name}, Comprueba tu cuenta de FerreTodo</p>
     <p>Tu cuenta ya esta casi lista, solo debes confirmarla en el siguiente enlace: 
-        <a href="http://localhost:3000/confirmar/${token}">Confirmar cuenta</a>
+        <a href="https://farretodo-production.up.railway.app/confirmar/${token}">Confirmar cuenta</a>
     </p>
     `,
   });
@@ -48,7 +48,7 @@ const emailOlvidePassword = async (data) => {
       text: "Comprueba tu cuenta en Meli-Ropa",
       html: `<p>Hola : ${name}, has solicitado reestablecer tu password en FerreTodo</p>
       <p> Sigue el siguiente enlace para generar un nuevo password: 
-          <a href="http://localhost:3000/olvide-password/${token}">Reestablecer Password</a>
+          <a href="https://farretodo-production.up.railway.app/olvide-password/${token}">Reestablecer Password</a>
       </p>
       `,
     });
