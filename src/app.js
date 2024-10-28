@@ -6,10 +6,11 @@ const routes = require("./routes/index.js");
 const cookieSession = require("cookie-session");
 const cors = require("cors"); // Agregamos cors
 const { FRONTEND_URL } = process.env;
+const { FRONTEND_URL_LOCAL } = process.env;
 require("./db.js");
 
 
-const baseURL = FRONTEND_URL?.replace(/\/$/, "") || "http://localhost:3000" || "https://farretodo-production.up.railway.app/"; // Elimina barra diagonal al final
+const baseURL = FRONTEND_URL?.replace(/\/$/, "") || FRONTEND_URL_LOCAL?.replace(/\/$/, "") || "https://farretodo-production.up.railway.app/"; // Elimina barra diagonal al final
 const server = express();
 const dotenv = require('dotenv');
 
