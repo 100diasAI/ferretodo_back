@@ -1,43 +1,66 @@
 const { Router } = require("express");
 const { Producto, Categoria } = require("../db.js");
-const {Op} = require('sequelize')
+const { Op } = require('sequelize');
 
 const router = Router();
 
 router.get('/', async(req, res) => {
-    const {name} = req.query
-    let page = 1;
-    page = parseInt(page)
-    const paginated = 500;
+    try {
+        const { name, page = 1, limit = 500 } = req.query;
+        
+        // Validar página
+        const currentPage = parseInt(page);
+        if (currentPage <= 0) {
+            return res.status(400).json({ 
+                success: false,
+                error: 'Las páginas deben ser números que empiezan desde el 1.'
+            });
+        }
 
-    if(page <= 0 || !page) return res.status(400).send({Error: 'Las páginas deben ser números que empiezan desde el 1.'})
+        // Configurar la consulta base
+        const queryOptions = {
+            include: [Categoria],
+            offset: limit * (currentPage - 1),
+            limit: parseInt(limit),
+            distinct: true,
+            order: [['id', 'ASC']]
+        };
 
-    let productsSearch
+        // Añadir filtro por nombre si existe
+        if (name) {
+            queryOptions.where = {
+                nombre: {
+                    [Op.iLike]: `%${name}%`
+                }
+            };
+        }
 
-    const query = {include: [Categoria], offset: paginated*(page-1), limit: paginated, distinct: true, order: ['id']}
+        // Realizar la consulta
+        const { count, rows } = await Producto.findAndCountAll(queryOptions);
 
-    if(!name) productsSearch = await Producto.findAndCountAll(query);
-    else productsSearch = await Producto.findAndCountAll({
-        ...query,
-        where:{
-            nombre:{
-                [Op.iLike]: `%${name}%`,
+        // Calcular información de paginación
+        const totalPages = Math.ceil(count / limit);
+        
+        // Enviar respuesta
+        res.status(200).json({
+            success: true,
+            productos: rows,
+            paginacion: {
+                total: count,
+                porPagina: limit,
+                paginaActual: currentPage,
+                totalPaginas: totalPages
             }
-        },
-    });
+        });
 
-    const totalProductsForQuery = productsSearch.count
-    const numberOfPages =  Math.ceil( totalProductsForQuery / paginated)
-
-    const productos = productsSearch.rows.map(p => p.dataValues)
-
-    const paginatedOnPage = productos.length
-
-    const paginateInfo = {currentPage: page, lastPage: numberOfPages, paginated: paginatedOnPage}
-
-    if(page > numberOfPages) return res.redirect('./' + numberOfPages)
-
-    res.status(200).send({productos, paginateInfo})
-})
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Error al obtener los productos',
+            details: error.message
+        });
+    }
+});
 
 module.exports = router;
