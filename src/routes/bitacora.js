@@ -19,12 +19,19 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { usuarioId, accion, detalles } = req.body;
   console.log('Recibida solicitud para registrar actividad:', { usuarioId, accion, detalles });
+  
+  // Obtener la IP real del cliente
+  const ip = req.headers['x-forwarded-for'] || 
+             req.headers['x-real-ip'] || 
+             req.connection.remoteAddress || 
+             req.socket.remoteAddress;
+             
   try {
     const nuevoRegistro = await Bitacora.create({
       usuarioId,
       accion,
       detalles,
-      ip: req.ip,
+      ip: ip,  // Usar la IP obtenida
       fechaHoraInicio: new Date(),
     });
     console.log('Actividad registrada con éxito:', nuevoRegistro);

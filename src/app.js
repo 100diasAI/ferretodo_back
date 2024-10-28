@@ -58,4 +58,6 @@ server.use((err, req, res, next) => {
   res.status(status).send(message);
 });
 
+server.set('trust proxy', true);
+
 module.exports = server;
