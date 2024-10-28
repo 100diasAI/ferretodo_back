@@ -1,8 +1,15 @@
 const { Router } = require("express");
 const { Producto, Categoria } = require("../db.js");
 const { Op } = require('sequelize');
+const cors = require('cors');
 
 const router = Router();
+
+// Middleware específico para esta ruta si es necesario
+router.use(cors({
+  origin: ['https://farretodo-production.up.railway.app', 'http://localhost:3000'],
+  credentials: true
+}));
 
 router.get('/', async(req, res) => {
     try {
@@ -42,6 +49,9 @@ router.get('/', async(req, res) => {
         const totalPages = Math.ceil(count / limit);
         
         // Enviar respuesta
+        res.header('Access-Control-Allow-Origin', 'https://farretodo-production.up.railway.app');
+        res.header('Access-Control-Allow-Credentials', 'true');
+        
         res.status(200).json({
             success: true,
             productos: rows,
