@@ -9,17 +9,23 @@ cloudinary.config({
 
 const uploadImage = async (req, res) => {
   try {
+    console.log('Files received:', req.files); // Debug
+
     if (!req.files || !req.files.imagen) {
-      return res.status(400).json({ error: 'No se ha proporcionado ninguna imagen' });
+      return res.status(400).json({ 
+        error: 'No se ha proporcionado ninguna imagen',
+        filesReceived: req.files 
+      });
     }
 
     const file = req.files.imagen;
     
     // Subir a Cloudinary
     const result = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: 'productos',
-      resource_type: 'auto'
+      folder: 'productos'
     });
+
+    console.log('Cloudinary result:', result); // Debug
 
     res.json({ 
       success: true,
