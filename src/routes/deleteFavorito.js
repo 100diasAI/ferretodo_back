@@ -5,13 +5,12 @@ const router = Router();
 
 // DELETE producto con id
 
-router.delete("/:id", async (req, res, next) => {
-    const { userId } = req.body;
+router.delete("/:userId/:productId", async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const { userId, productId } = req.params;
         await ProductosFav.destroy({
             where: {
-                productId: parseInt(id),
+                productId: parseInt(productId),
                 usuarioId: userId
             }
         });
