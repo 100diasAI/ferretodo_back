@@ -10,8 +10,8 @@
   "author": "Oliver",
   "license": "MIT",
   "engines": {
-    "node": ">=12.18.3",
-    "npm": ">=6.14.6"
+    "node": "18.17.1",
+    "npm": "9.6.7"
   },
   "dependencies": {
     "@huggingface/inference": "^2.8.0",
@@ -35,6 +35,7 @@
     "pg": "^8.5.1",
     "replicate": "^0.33.0",
     "sequelize": "^6.3.5",
+    "stripe": "^17.3.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
