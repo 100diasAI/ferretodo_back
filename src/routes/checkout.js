@@ -1,60 +1,40 @@
 const { Router } = require("express");
 const router = Router();
-const mercadopago = require("mercadopago");
+const stripe = require("../config/stripe");
 const { isAuthenticated } = require("../controllers/user.controller");
-//Provisional de esta forma, luego va en el .env
-const ACCESS_TOKEN = "APP_USR-2136680771902247-071214-4767199d5dfa22b7c0885a9e58ff3bec-1159384629";
-
-mercadopago.configure({
-    access_token: ACCESS_TOKEN,
-});
+const Pedido = require("../models/Pedido");
 
 router.post("/", isAuthenticated, async (req, res) => {
     try {
+        console.log("Iniciando checkout con Stripe:", req.body);
         const { items, datos, pedidoGenerado } = req.body;
-        if (!items || !datos || !pedidoGenerado) {
-            return res.status(400).json({ error: "Faltan datos requeridos" });
-        }
-
-        const idPedido = pedidoGenerado.pedido.id;
-        const productos = items.map((p) => ({
-            title: p.nombre,
-            unit_price: parseInt(p.precio),
-            quantity: parseInt(p.cantidad),
-            description: p.descripcion || p.nombre,
-            picture_url: p.urlimagen || 'https://via.placeholder.com/150',
-            category_id: p.subcategoria || 'general'
+        
+        const lineItems = items.map(item => ({
+            price_data: {
+                currency: 'bob',
+                product_data: {
+                    name: item.nombre,
+                    description: item.descripcion || '',
+                    images: [item.imagen || 'https://via.placeholder.com/150']
+                },
+                unit_amount: Math.round(item.precio * 100)
+            },
+            quantity: item.cantidad
         }));
 
-        let preference = {
-            items: productos,
-            payer: {
-                name: datos.nombre,
-                surname: datos.apellido,
-                identification: {
-                    type: "DNI",
-                    number: datos.documento
-                },
-                address: {
-                    street_name: datos.direccion
-                }
-            },
-            payment_methods: {
-                excluded_payment_types: [{ id: "ticket" }],
-                installments: 12
-            },
-            back_urls: {
-                success: `${process.env.FRONTEND_URL}/checkout/success/${idPedido}`,
-                failure: `${process.env.FRONTEND_URL}/checkout/failure/${idPedido}`,
-                pending: `${process.env.FRONTEND_URL}/checkout/pending/${idPedido}`
-            },
-            auto_return: "approved",
-            binary_mode: true,
-            notification_url: `${process.env.BACKEND_URL}/webhook/mercadopago`
-        };
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${process.env.FRONTEND_URL}/checkout/success/${pedidoGenerado.pedido.id}?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.FRONTEND_URL}/checkout/failure/${pedidoGenerado.pedido.id}`,
+            metadata: {
+                pedido_id: pedidoGenerado.pedido.id
+            }
+        });
 
-        const response = await mercadopago.preferences.create(preference);
-        res.json(response.body);
+        console.log("Sesión de Stripe creada:", session.id);
+        res.json({ urlPago: session.url });
     } catch (error) {
         console.error("Error en checkout:", error);
         res.status(500).json({ error: error.message });
