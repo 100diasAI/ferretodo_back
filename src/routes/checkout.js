@@ -9,66 +9,56 @@ mercadopago.configure({
     access_token: ACCESS_TOKEN,
 });
 
-router.post("/", isAuthenticated, (req, res) => {
-    try{
-        const {items, datos, pedidoGenerado} = req.body
-        console.log(req.body)
-        const idPedido = pedidoGenerado.pedido.id;
-        const productos = [];
-        items.map((p) => {
-            let item = {
-                title: p.nombre,
-                unit_price: p.precio,
-                quantity: p.cantidad,
-                description: p.descripcion,
-                picture_url: p.urlimagen,
-                category_id: p.subcategoria,
-            }
-            productos.push(item);
-        })
-
-        const pagador = {
-            name: datos.nombre,
-            surname: datos.apellido,
-            identification: {
-                type: "DNI",
-                number: datos.documento
-            },
-            address: {
-                street_name: datos.direccion
-            }
+router.post("/", isAuthenticated, async (req, res) => {
+    try {
+        const { items, datos, pedidoGenerado } = req.body;
+        if (!items || !datos || !pedidoGenerado) {
+            return res.status(400).json({ error: "Faltan datos requeridos" });
         }
-        
+
+        const idPedido = pedidoGenerado.pedido.id;
+        const productos = items.map((p) => ({
+            title: p.nombre,
+            unit_price: parseInt(p.precio),
+            quantity: parseInt(p.cantidad),
+            description: p.descripcion || p.nombre,
+            picture_url: p.urlimagen || 'https://via.placeholder.com/150',
+            category_id: p.subcategoria || 'general'
+        }));
+
         let preference = {
             items: productos,
-            payer: pagador,
-            payment_methods: {
-                excluded_payment_types: [
-                    {
-                        id: "ticket"
-                    }
-                ],
-                installments: 12
+            payer: {
+                name: datos.nombre,
+                surname: datos.apellido,
+                identification: {
+                    type: "DNI",
+                    number: datos.documento
                 },
-            back_urls:{
-                success: "https://farretodo-production.up.railway.app/checkout/success/"+idPedido,
-                failure: "https://farretodo-production.up.railway.app/checkout/success/"+idPedido,
+                address: {
+                    street_name: datos.direccion
+                }
+            },
+            payment_methods: {
+                excluded_payment_types: [{ id: "ticket" }],
+                installments: 12
+            },
+            back_urls: {
+                success: `${process.env.FRONTEND_URL}/checkout/success/${idPedido}`,
+                failure: `${process.env.FRONTEND_URL}/checkout/failure/${idPedido}`,
+                pending: `${process.env.FRONTEND_URL}/checkout/pending/${idPedido}`
             },
             auto_return: "approved",
             binary_mode: true,
+            notification_url: `${process.env.BACKEND_URL}/webhook/mercadopago`
         };
 
-        mercadopago.preferences.create(preference)
-            .then(function(response){
-                res.json(response.body);
-            }).catch(function (error){
-                console.log(error);
-                res.send("Se ha producido un error");
-            })
-    }catch(e){
-        console.log(e);
-        res.send("Se ha producido un error");
+        const response = await mercadopago.preferences.create(preference);
+        res.json(response.body);
+    } catch (error) {
+        console.error("Error en checkout:", error);
+        res.status(500).json({ error: error.message });
     }
-})
+});
 
 module.exports = router;
