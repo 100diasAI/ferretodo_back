@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const stripe = require("../config/stripe");
 const { isAuthenticated } = require("../controllers/user.controller");
-const Pedido = require("../models/Pedido");
+//const Pedido = require("../models/pedido");
 
 router.post("/", isAuthenticated, async (req, res) => {
     try {

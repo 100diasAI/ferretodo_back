@@ -10,8 +10,8 @@
   "author": "Oliver",
   "license": "MIT",
   "engines": {
-    "node": "18.17.1",
-    "npm": "9.6.7"
+    "npm": "10.2.4",
+    "node": "^20.11.1"
   },
   "dependencies": {
     "@huggingface/inference": "^2.8.0",
