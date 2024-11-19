@@ -238,20 +238,29 @@ const nuevoPassword = async (req, res) => {
 const isAuthenticated = async (req, res, next) => {
     try {
         console.log("=== DEBUG AUTH MIDDLEWARE ===");
-        console.log("Headers de autenticación:", req.headers.authorization);
-        console.log("Cookies:", req.cookies);
-        console.log("Session:", req.session);
-        console.log("=== DEBUG AUTH MIDDLEWARE FIN ===");
+        console.log("Headers:", req.headers);
+        
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "No se proporcionó token de autenticación" });
+        }
 
-        const decode = await promisify(jwt.verify)(
-            req.cookies.jwt,
-            process.env.JWT_SECRET
-        );
-        const { id } = decode;
-        const user = await Usuario.findByPk(id);
-        if(!user) return res.send({Error: "Usuario no encontrado."})
-        if(user.banned) return res.send({Error: "Ese usuario está baneado."})
-        next()
+        // Verificar formato del token
+        if (!authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: "Formato de token inválido" });
+        }
+
+        const token = authHeader.split(' ')[1];
+        
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log("Token decodificado:", decoded);
+            req.user = decoded;
+            next();
+        } catch (err) {
+            console.error("Error al verificar token:", err);
+            return res.status(401).json({ error: "Token inválido o expirado" });
+        }
     } catch (error) {
         console.error("Error en middleware de autenticación:", error);
         return res.status(401).json({ error: "Error de autenticación" });

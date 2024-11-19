@@ -4,20 +4,14 @@ const stripe = require("../config/stripe");
 const { isAuthenticated } = require("../controllers/user.controller");
 //const Pedido = require("../models/pedido");
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/create_preference", isAuthenticated, async (req, res) => {
     try {
-        console.log("=== DEBUG CHECKOUT BACKEND ===");
-        console.log("Headers completos:", req.headers);
-        console.log("Token recibido:", req.headers.authorization);
-        console.log("Usuario decodificado:", req.user);
-        console.log("Body recibido:", req.body);
-        console.log("=== DEBUG CHECKOUT BACKEND FIN ===");
+        console.log("=== DEBUG CHECKOUT ROUTE ===");
+        console.log("Usuario autenticado:", req.user);
+        console.log("Body de la petición:", req.body);
 
         if (!req.user) {
-            return res.status(401).json({ 
-                error: "No autorizado",
-                message: "La sesión ha expirado o no es válida"
-            });
+            return res.status(401).json({ error: "Usuario no autenticado" });
         }
 
         console.log("Iniciando checkout con Stripe:", req.body);
@@ -53,7 +47,7 @@ router.post("/", isAuthenticated, async (req, res) => {
         console.error("Error en checkout:", error);
         res.status(500).json({ 
             error: error.message,
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            details: error.stack
         });
     }
 });
