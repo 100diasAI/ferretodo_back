@@ -86,7 +86,7 @@ router.use("/ratings", deletleReview);
 router.use("/ratings/usuario", getRatingUserID);
 router.use("/usuario", deleteUser);
 router.use("/pedido", deletePedido);
-router.use("/create_preference", createPreference);
+router.use("/checkout", createPreference);
 router.use("/usuario/confirmacion", confirmarCompra);
 router.use("/admin/despachar", productoDespachado);
 router.use("/admin/correo", productoLlegando);

@@ -67,11 +67,14 @@ server.use(
   })
 );
 
-// para acceder a info sensible primero verificar el id desde la galleta req.session.userId
-// if (!req.session.userId) {
-//   throw new Error("not authenticated");
-// }
+// Agregar este middleware de logging para debug
+server.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  console.log('Headers:', req.headers);
+  next();
+});
 
+// Asegúrate de que esto esté después de todos los middlewares pero antes del manejo de errores
 server.use("/", routes);
 
 // Error catching endware.
