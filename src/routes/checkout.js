@@ -4,7 +4,7 @@ const stripe = require("../config/stripe");
 const { isAuthenticated } = require("../controllers/user.controller");
 //const Pedido = require("../models/pedido");
 
-router.post("/create_preference", isAuthenticated, async (req, res) => {
+router.post("/create_preference", async (req, res) => {
     try {
         console.log("=== DEBUG CHECKOUT ROUTE ===");
         console.log("Usuario autenticado:", req.user);
@@ -42,7 +42,7 @@ router.post("/create_preference", isAuthenticated, async (req, res) => {
         });
 
         console.log("Sesión de Stripe creada:", session.success_url);
-        res.status(200).json({ success_url: session.success_url, cancel_url: session.cancel_url });
+        res.statusjson({ success_url: session.success_url, cancel_url: session.cancel_url });
     } catch (error) {
         console.error("Error en checkout:", error);
         res.status(500).json({ 
