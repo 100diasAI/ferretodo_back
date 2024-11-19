@@ -10,9 +10,6 @@ router.post("/create_preference", async (req, res) => {
         console.log("Usuario autenticado:", req.user);
         console.log("Body de la petición:", req.body);
 
-        if (!req.user) {
-            return res.status(401).json({ error: "Usuario no autenticado" });
-        }
 
         console.log("Iniciando checkout con Stripe:", req.body);
         const { items, datos, pedidoGenerado } = req.body;
