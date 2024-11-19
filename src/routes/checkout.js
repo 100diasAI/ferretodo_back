@@ -41,7 +41,7 @@ router.post("/create_preference", isAuthenticated, async (req, res) => {
             }
         });
 
-        console.log("Sesión de Stripe creada:", session.id);
+        console.log("Sesión de Stripe creada:", session.success_url);
         res.json({ urlPago: session.url });
     } catch (error) {
         console.error("Error en checkout:", error);
