@@ -236,22 +236,27 @@ const nuevoPassword = async (req, res) => {
 };
 
 const isAuthenticated = async (req, res, next) => {
+    try {
+        console.log("=== DEBUG AUTH MIDDLEWARE ===");
+        console.log("Headers de autenticación:", req.headers.authorization);
+        console.log("Cookies:", req.cookies);
+        console.log("Session:", req.session);
+        console.log("=== DEBUG AUTH MIDDLEWARE FIN ===");
 
-  try{
-  const decode = await promisify(jwt.verify)(
-    req.cookies.jwt,
-    process.env.JWT_SECRET
-  );
-  const { id } = decode;
-  const user = await Usuario.findByPk(id);
-  if(!user) return res.send({Error: "Usuario no encontrado."})
-  if(user.banned) return res.send({Error: "Ese usuario está baneado."})
-  next()
-  }catch(e){
-    console.log(e)
-    res.send(e)
-  }
-}
+        const decode = await promisify(jwt.verify)(
+            req.cookies.jwt,
+            process.env.JWT_SECRET
+        );
+        const { id } = decode;
+        const user = await Usuario.findByPk(id);
+        if(!user) return res.send({Error: "Usuario no encontrado."})
+        if(user.banned) return res.send({Error: "Ese usuario está baneado."})
+        next()
+    } catch (error) {
+        console.error("Error en middleware de autenticación:", error);
+        return res.status(401).json({ error: "Error de autenticación" });
+    }
+};
 
 const isAdmin = async (req, res, next) => {
 
